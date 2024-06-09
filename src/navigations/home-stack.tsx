@@ -7,6 +7,7 @@ import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { StackScreenProps } from "@react-navigation/stack";
 // import { useAppSelector } from "src/ducks/useful-hooks";
 import { AuthStackNavigator } from "./auth-stack";
+import DetailedScreen from "../screens/audio-details";
 // import { SettingsStack } from "./settings-stack";
 // import { Entypo } from "@expo/vector-icons";
 // import DetailScreen from "../screens/video-details";
@@ -71,6 +72,16 @@ const HomeStackNavigator: React.FC<any> = ({ navigation }) => {
 			<StackNav.Screen
 				name='Home'
 				component={HomeScreen}
+				options={{
+					headerShown: false,
+					// headerTitle: "Home",
+					// headerRight: () => <Entypo name='menu' size={24} color='black' />,
+				}}
+			/>
+
+			<StackNav.Screen
+				name='DetailScreen'
+				component={DetailedScreen}
 				options={{
 					headerShown: false,
 					// headerTitle: "Home",

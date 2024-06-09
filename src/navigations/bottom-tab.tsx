@@ -5,22 +5,26 @@ import { HomeStackNavigator } from "./home-stack";
 // import Downloads from "../screens/downloads";
 // import Plans from "../screens/plans";
 // import SettingsScreen from "../screens/settings";
-import { Text, View } from "react-native";
+import { Platform, SafeAreaView, Text, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 // import HeaderRight from "../components/header/HeaderRight";
 // import HeaderLeft from "../components/header/HeaderLeft";
-import { Feather } from "@expo/vector-icons";
+import { EvilIcons } from "@expo/vector-icons";
 import tw from "twrnc";
 import SettingsScreen from "../screens/settings";
+import { StatusBar } from "expo-status-bar";
+import ButtonCategory from "../components/button-category";
+import { Feather } from "@expo/vector-icons";
+import SearchScreen from "../screens/search";
+import { FontAwesome5 } from "@expo/vector-icons";
+import PlanScreen from "../screens/plans";
 
 export type BottomTabParams = {
 	HomeTab: undefined;
-	Explore: undefined;
-	Profile: undefined;
-	downloads: undefined;
-	plans: undefined;
 	settings: undefined;
 	add: undefined;
+	Search: undefined;
+	plans: undefined;
 };
 
 const Tabs = createBottomTabNavigator<BottomTabParams>();
@@ -41,12 +45,8 @@ const HomeIcon = ({ focused, color, size }: TabBarIconProps) => (
 	/>
 );
 
-const DownloadIcon = ({ focused, color, size }: TabBarIconProps) => (
-	<AntDesign
-		name={focused ? "clouddownload" : "clouddownloado"}
-		size={26}
-		color='black'
-	/>
+const SearchIcon = ({ focused, color, size }: TabBarIconProps) => (
+	<Feather name='search' size={24} color={color} />
 );
 
 const PlansIcon = ({ focused, color, size }: TabBarIconProps) => (
@@ -57,17 +57,12 @@ const SettingsIcon = ({ focused, color, size }: TabBarIconProps) => (
 	<MaterialCommunityIcons
 		name={focused ? "account-settings" : "account-settings-outline"}
 		size={26}
-		color='black'
+		color='white'
 	/>
 );
 
-const PlusIcon = ({ focused, color, size }: TabBarIconProps) => (
-	<Feather
-		name='plus-circle'
-		size={50}
-		color='black'
-		style={tw`-top-5 bg-white  pl-3 pr-3 -pt-7 -pb-5 z-50 absolute rounded-md `}
-	/>
+const PlanIcon = ({ focused, color, size }: TabBarIconProps) => (
+	<FontAwesome5 name='money-check' size={26} color='white' />
 );
 
 export /**
@@ -76,37 +71,95 @@ export /**
  * @return {*}
  */
 const BottomTabNavigator: React.FC<{}> = () => {
+	const statusBarHeight = Platform.OS === "ios" ? 200 : 0;
 	return (
-		<Tabs.Navigator
-			screenOptions={{
-				tabBarHideOnKeyboard: true,
-				headerShown: true,
-				headerTitle: "",
-				// headerRight: () => <HeaderRight />,
-				// headerLeft: () => <HeaderLeft />,
-			}}>
-			<Tabs.Screen
-				name='HomeTab'
-				component={HomeStackNavigator}
-				options={{
-					title: "Home",
-					headerTitle: "",
-					// headerShown: false,
-					tabBarIcon: HomeIcon,
-				}}
-			/>
+		<>
+			<StatusBar backgroundColor='white' />
+			<SafeAreaView
+				style={{
+					flex: 1,
+					backgroundColor: "black",
+					paddingTop: statusBarHeight,
+				}}>
+				<Tabs.Navigator
+					screenOptions={{
+						tabBarHideOnKeyboard: true,
+						headerShown: true,
+						headerTitle: "",
+						headerStyle: {
+							backgroundColor: "black",
+							borderBottomWidth: 0,
+							shadowColor: "transparent",
+							elevation: 0,
+						},
 
-			<Tabs.Screen
-				name='settings'
-				component={SettingsScreen}
-				options={{
-					title: "settings",
-					headerTitle: "",
-					// headerShown: false,
-					tabBarIcon: SettingsIcon,
-				}}
-			/>
-		</Tabs.Navigator>
+						headerLeft: () => (
+							<View style={tw`pl-3 pr-3 flex-row gap-5 items-center`}>
+								<View
+									style={tw`bg-[#00b894] justify-center items-center rounded-full h-9 w-9`}>
+									<Text style={tw`text-white text-5`}>G</Text>
+								</View>
+								<View>
+									<ButtonCategory
+										title='All'
+										setSelectedBtn={""}
+										selectedBtn={""}
+										setCatId={""}
+										item={""}
+									/>
+								</View>
+							</View>
+						),
+
+						headerTintColor: "white",
+						tabBarActiveTintColor: "white",
+						tabBarInactiveTintColor: "white",
+						tabBarStyle: {
+							backgroundColor: "black",
+							borderBottomWidth: 0,
+						},
+					}}>
+					<Tabs.Screen
+						name='HomeTab'
+						component={HomeStackNavigator}
+						options={{
+							title: "Home",
+							headerTitle: "",
+							tabBarIcon: HomeIcon,
+						}}
+					/>
+
+					<Tabs.Screen
+						name='Search'
+						component={SearchScreen}
+						options={{
+							title: "search",
+							headerTitle: "",
+							tabBarIcon: SearchIcon,
+						}}
+					/>
+					<Tabs.Screen
+						name='plans'
+						component={PlanScreen}
+						options={{
+							title: "plans",
+							headerTitle: "",
+							tabBarIcon: PlanIcon,
+						}}
+					/>
+
+					<Tabs.Screen
+						name='settings'
+						component={SettingsScreen}
+						options={{
+							title: "Settings",
+							headerTitle: "",
+							tabBarIcon: SettingsIcon,
+						}}
+					/>
+				</Tabs.Navigator>
+			</SafeAreaView>
+		</>
 	);
 };
 

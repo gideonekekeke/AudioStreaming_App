@@ -1,4 +1,4 @@
 import { App } from "./src";
-// import "./global.css";
+import "./global.css";
 
 export default App;
